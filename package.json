@@ -1,0 +1,23 @@
+{
+  "name": "sticknotes",
+  "version": "1.0.0",
+  "description": "Projeto de notas autoadesivas (estilo post-it) usando o framework Electron e o banco de dados MongoDBProjeto de notas autoadesivas (estilo post-it) usando o framework Electron e o banco de dados MongoDB",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jean-Soares9/sticknotes.git"
+  },
+  "author": "Jean Andrade",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jean-Soares9/sticknotes/issues"
+  },
+  "homepage": "https://github.com/Jean-Soares9/sticknotes#readme",
+  "devDependencies": {
+    "electron": "^34.3.0"
+  }
+}
