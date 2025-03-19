@@ -4,13 +4,14 @@
  */
 
 // importação do mongoose
+// Não esquecer de instalar o módulo (npm i mongoose)
 const mongoose = require('mongoose')
 
 // configuração do banco de dados
 // ip/link do servidor, autenticação, nome do Banco
 // ao final da url definir o nome do banco de dados
 // exemplo: /dbclientes
-const url = 'mongodb+srv://admin:123Senac@cluster0.4cawy.mongodb.net/dbclientes'
+const url = 'mongodb+srv://admin:123Senac@cluster0.4cawy.mongodb.net/dbnotes'
 
 // validação (evitar a abertura de várias conexões)
 let conectado = false

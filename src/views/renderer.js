@@ -17,3 +17,15 @@ function obterData() {
 }
 
 document.getElementById('dataAtual').innerHTML = obterData()
+
+// Troca do ícone do banco de dados (status de conexão)
+// Uso de api do preload.js
+api.dbStatus((event, message) => {
+    // Teste de recebimento da mensagem
+    console.log(message)
+    if (message === "conectar") {
+        document.getElementById('icon').src="../public/img/dbon.png"
+    } else {
+        document.getElementById('icon').src="../public/img/dboff.png"
+    }
+})
