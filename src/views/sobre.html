@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Impedir a execução de scripts externos-->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' ">
     <title>Sobre</title>
     <!-- CSS personalizado ATENÇÃO!!! sempre após o CSS do bootstrap-->
     <link rel="stylesheet" href="../public/css/style.css">
 </head>
 <body>
-    <h2>Sticky Notes</h2>
-    <h3>Notas adesivas interativas</h3>
-    <h4>Autor: Jean ANdrade</h4>
-    <h4>Sob a licença MIT</h4>
-    <p>Versão 1.0</p>
+    <div class="container">
+        <section id="sobre">
+            <h2>Sticky Notes</h2>
+            <h3>Notas adesivas interativas</h3>
+            <h4>Autor: Jean ANdrade</h4>
+            <h4>Sob a licença MIT</h4>
+            <p>Versão 1.0</p>
+            <button type="button" onclick="fechar()">OK</button>
+        </section>
+    </div>
+    
+    <!-- Renderizador da tela sobre -->
+     <script src="rendererSobre.js"></script>
 </body>
 </html>
