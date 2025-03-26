@@ -14,13 +14,16 @@ const path = require('node:path')
 // Importação dos metodos conectar e desconectar (modulo de conexão)
 const { conectar, desconectar } = require('./database.js')
 
+// Importação do modelo de dados (Notes.js)
+const noteModel = require('./src/models/Nodes.js')
+
 // Janela principal
 let win
 const createWindow = () => {
   // definindo tema da janela claro ou escuro
   nativeTheme.themeSource = 'light'
   win = new BrowserWindow({
-    
+
     width: 1010,
     height: 720,
     //frame: false,
@@ -44,63 +47,63 @@ const createWindow = () => {
 // Janela sobre
 let about
 function aboutWindow() {
-  nativeTheme.themeSource='light'
+  nativeTheme.themeSource = 'light'
   // Obter a janela prinipal
-const mainWindow = BrowserWindow.getFocusedWindow()
-// validação (se existir a janela principal)
-if (mainWindow) {
-  about = new BrowserWindow({
-    width: 300,
-    height: 200,
-    autoHideMenuBar: true,
-    resizable: false,
-    minimizable: false,
-    // estabelecer uma relação hierarquica entre janelas
-    parent: mainWindow,
-    // criar uma janela modal (só retorna a principal quando encerrada)
-    modal: true,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-}
-  
+  const mainWindow = BrowserWindow.getFocusedWindow()
+  // validação (se existir a janela principal)
+  if (mainWindow) {
+    about = new BrowserWindow({
+      width: 300,
+      height: 200,
+      autoHideMenuBar: true,
+      resizable: false,
+      minimizable: false,
+      // estabelecer uma relação hierarquica entre janelas
+      parent: mainWindow,
+      // criar uma janela modal (só retorna a principal quando encerrada)
+      modal: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      }
+    })
+  }
+
   about.loadFile('./src/views/sobre.html')
 
   // Recebimento da mensagem do renderizador da tela sobre para fechar a janela usando o botão ok
   ipcMain.on('about-exit', () => {
     // Validação (se existir a janela e ela não estiver destruída, fechar)
-    if(about && !about.isDestroyed()) {
+    if (about && !about.isDestroyed()) {
       about.close()
     }
-    
+
   })
 }
 
 // Janela nota
 let note
 function noteWindow() {
-  nativeTheme.themeSource='light'
+  nativeTheme.themeSource = 'light'
   // Obter a janela prinipal
-const mainWindow = BrowserWindow.getFocusedWindow()
-// validação (se existir a janela principal)
-if (mainWindow) {
-  note = new BrowserWindow({
-    width: 400,
-    height: 270,
-    autoHideMenuBar: true,
-    resizable: false,
-    minimizable: false,
-    // estabelecer uma relação hierarquica entre janelas
-    parent: mainWindow,
-    // criar uma janela modal (só retorna a principal quando encerrada)
-    modal: true,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-}
-  
+  const mainWindow = BrowserWindow.getFocusedWindow()
+  // validação (se existir a janela principal)
+  if (mainWindow) {
+    note = new BrowserWindow({
+      width: 400,
+      height: 270,
+      autoHideMenuBar: true,
+      //resizable: false,
+      //minimizable: false,
+      // estabelecer uma relação hierarquica entre janelas
+      parent: mainWindow,
+      // criar uma janela modal (só retorna a principal quando encerrada)
+      modal: true,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+      }
+    })
+  }
+
   note.loadFile('./src/views/nota.html')
 
 }
@@ -118,14 +121,14 @@ app.whenReady().then(() => {
   ipcMain.on('db-connect', async (event) => {
     const conectado = await conectar()
     if (conectado) {
-// Enviar ao renderizador uma mensagem para trocar a imagem do ícone do status do banco
-    //de dados (criar um delay de 0.5 ou 1s para sincronização com a nuvem)
-    setTimeout(() => {
-      // Enviar ao renderizador a mensagem "conectado"
-      // db-status (IPC - comunicação entre processos - preload.js)
-      event.reply('db-status', "conectar")
-    }, 500) // 500ms = 0.5s
-    }    
+      // Enviar ao renderizador uma mensagem para trocar a imagem do ícone do status do banco
+      //de dados (criar um delay de 0.5 ou 1s para sincronização com a nuvem)
+      setTimeout(() => {
+        // Enviar ao renderizador a mensagem "conectado"
+        // db-status (IPC - comunicação entre processos - preload.js)
+        event.reply('db-status', "conectar")
+      }, 500) // 500ms = 0.5s
+    }
   })
 
   // só ativar a janela principal se nenhuma outra estiver ativa
@@ -149,7 +152,7 @@ app.on('before-quit', async () => {
 })
 
 // Reduzir a verbosidade de logs não criticos (devtools)
-app.commandLine.appendSwitch('log-level','3')
+app.commandLine.appendSwitch('log-level', '3')
 
 // template do menu
 const template = [
@@ -214,3 +217,22 @@ const template = [
   }
 ]
 
+// =====================================================
+// == CRUD Create ======================================
+
+// Recebimento do objeto que contem os dados da nota
+ipcMain.on('create-note', async (event, stickyNote) => {
+  // IMPORTANTE! Teste de recebimento do objeto - Passo 2
+  console.log(stickyNote)
+  // Criar uma nova estruturade dados para salvar no banco
+  // Atenção! Os atributos da estrutura precisam ser identicos ao modelo e os valores são obtidos através do objeto stickyNote
+  const newNote = noteModel({
+    texto: stickyNote.textNote,
+    cor: stickyNote.colorNote
+  })
+  // Salvar a note no banco de dados (Passo 3: fluxo)
+  newNote.save()
+})
+
+// == Fim - CRUD Create =================================
+// ======================================================
