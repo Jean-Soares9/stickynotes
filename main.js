@@ -224,14 +224,20 @@ const template = [
 ipcMain.on('create-note', async (event, stickyNote) => {
   // IMPORTANTE! Teste de recebimento do objeto - Passo 2
   console.log(stickyNote)
-  // Criar uma nova estruturade dados para salvar no banco
-  // Atenção! Os atributos da estrutura precisam ser identicos ao modelo e os valores são obtidos através do objeto stickyNote
-  const newNote = noteModel({
-    texto: stickyNote.textNote,
-    cor: stickyNote.colorNote
-  })
-  // Salvar a note no banco de dados (Passo 3: fluxo)
-  newNote.save()
+  try {
+    // Criar uma nova estruturade dados para salvar no banco
+    // Atenção! Os atributos da estrutura precisam ser identicos ao modelo e os valores são obtidos através do objeto stickyNote
+    const newNote = noteModel({
+      texto: stickyNote.textNote,
+      cor: stickyNote.colorNote
+    })
+    // Salvar a note no banco de dados (Passo 3: fluxo)
+    newNote.save()
+    event.reply('reset-form')
+  } catch (error) {
+    console.log(error)
+  }
+
 })
 
 // == Fim - CRUD Create =================================
