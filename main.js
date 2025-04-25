@@ -127,7 +127,7 @@ app.whenReady().then(() => {
         // Enviar ao renderizador a mensagem "conectado"
         // db-status (IPC - comunicação entre processos - preload.js)
         event.reply('db-status', "conectar")
-      }, 500) // 500ms = 0.5s
+      }, 200) // 500ms = 0.5s
     }
   })
 
@@ -264,6 +264,19 @@ try {
   console.log(error)
 }
 
+})
+
+// Atualização das notas na janela principal
+ipcMain.on('update-list', () => {
+  // Validação (se a janela principal existir e não tiver sido encerrada)
+  if(win && !win.isDestroyed()) {
+    // Enviar ao renderer.js um pedido para recarregar a página
+    win.webContents.send('main-reload')
+    // Enviar novamente um pedido para troca do icone de status
+    setTimeout(() => {
+      win.webContents.send('db-status', "conectar")
+    }, 200) // Para garantir que o renderer esteja pronto
+  }
 })
 
 // == FIM - CRUD READ ==================================
