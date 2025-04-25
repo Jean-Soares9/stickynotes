@@ -6,7 +6,9 @@ console.log("Electron - Processo Principal")
 // nativeTheme (definir tema claro ou escuro)
 // Menu (definir um menu personalizado)
 // shell (acessar links externos no navegador padrão)
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain } = require('electron/main')
+// ipcMain
+// dialog (caixa de mensagem)
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog } = require('electron/main')
 
 // Ativação do preload.js (importação do path)
 const path = require('node:path')
@@ -16,6 +18,7 @@ const { conectar, desconectar } = require('./database.js')
 
 // Importação do modelo de dados (Notes.js)
 const noteModel = require('./src/models/Nodes.js')
+//const { dialog } = require('electron')
 
 // Janela principal
 let win
@@ -194,7 +197,7 @@ const template = [
       },
       {
         label: 'Recarregar',
-        role: 'reload'
+        click: () => updateList()
       },
       {
         label: 'DevTools',
@@ -266,8 +269,20 @@ try {
 
 })
 
+
+
+// == FIM - CRUD READ ==================================
+// =====================================================
+
+// =====================================================
+// == ATUALIZAÇÃO DA LISTA DE NOTAS ====================
+
 // Atualização das notas na janela principal
 ipcMain.on('update-list', () => {
+  updateList()
+})
+
+function updateList() {
   // Validação (se a janela principal existir e não tiver sido encerrada)
   if(win && !win.isDestroyed()) {
     // Enviar ao renderer.js um pedido para recarregar a página
@@ -277,7 +292,35 @@ ipcMain.on('update-list', () => {
       win.webContents.send('db-status', "conectar")
     }, 200) // Para garantir que o renderer esteja pronto
   }
+}
+
+// == FIM - ATUALIZAÇÃO DA LISTA DE NOTAS ==============
+// =====================================================
+
+// =====================================================
+// == CRUD DELETE ======================================
+
+ipcMain.on('delete-note', async(event, id) => {
+  console.log(id) // Teste do passo 2 (Importante!)
+  // Excluir o registro do banco (passo 3) IMPORTANTE! (Confirmar antes da exclusão)
+  // win (janela principal)
+  const { response } = await dialog.showMessageBox(win, {
+    type: 'warning',
+    title: "Atenção",
+    message: "Tem certeza que deseja excluir esta nota?\nEsta ação não poderá ser desfeita.",
+    buttons: ['Cancelar', 'Excluir'] //[0, 1]
+  })
+  if (response === 1) {
+    try {
+      const deleteNote = await noteModel.findByIdAndDelete(id)
+      updateList()
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
+
 })
 
-// == FIM - CRUD READ ==================================
+// == FIM - CRUD DELETE ================================
 // =====================================================

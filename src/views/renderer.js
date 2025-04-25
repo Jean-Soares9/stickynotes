@@ -61,6 +61,7 @@ api.renderNotes((event, notes) => {
         list.innerHTML += `
             <br>
             <li>
+                <p onclick="deleteNote('${n._id}')" id="x">X</p>
                 <p>${n._id}</p>
                 <p>${n.texto}</p>
                 <p>${n.cor}</p>
@@ -81,4 +82,15 @@ api.mainReload((args) => {
 })
 
 // == FIM - Atualização das Notas ============================
+// ===========================================================
+
+// ===========================================================
+// == CRUD DELETE ============================================
+
+function deleteNote(id) {
+    console.log(id) // Passo 1: receber o id da nota a ser excluido
+    api.deleteNote(id) // Passo 2: Enviar o id da nota ao main
+}
+
+// == FIM - CRUD DELETE ======================================
 // ===========================================================

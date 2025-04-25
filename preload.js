@@ -22,5 +22,6 @@ contextBridge.exposeInMainWorld('api', {
     listNotes: () => ipcRenderer.send('list-notes'),
     renderNotes: (notes) => ipcRenderer.on('render-notes', notes),
     updateList: () => ipcRenderer.send('update-list'),
-    mainReload: (args) => ipcRenderer.on('main-reload', args)
+    mainReload: (args) => ipcRenderer.on('main-reload', args),
+    deleteNote: (id) => ipcRenderer.send('delete-note', id)
 })
