@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Impedir a execução de scripts externos-->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' ">
-    <!--Titulo da Janela-->
     <title>Sticky Notes</title>
-    <!--Bootstrap-->
-    <!--<link rel="stylesheet" href="../public/css/bootstrap.min.css">-->
-    <!-- CSS personalizado ATENÇÃO!!! sempre após o CSS do bootstrap-->
-     <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="../public/css/style.css">
 </head>
+
 <body>
     <div class="container">
-        <!--<h1>Hello Electron</h1>-->
-        <!--<button type="button" class="btn btn-primary">Hello bootstrap</button>-->
-        <!-- Renderizar as notas (li será gerado de forma dinâmica pelo JS de acordo com o número de notas)-->
-         <ul id="listNotes"></ul>
-        
+
+        <ul id="listNotes"></ul>
+
     </div>
-    
+
     <footer>
-        <p id="dataAtual"></p>
-        <img src="../public/img/dboff.png" alt="icone banco de dados" id="icon">
+        <p id="currentDate"></p>
+        <img src="../public/img/dboff.png" alt="icone banco de dados" id="iconDB">
     </footer>
 
 
-    <!--Bootstrap-->
+
     <script src="../public/js/bootstrap.min.js"></script>
 
-    <!-- Processo de renderização-->
-     <script src="renderer.js"></script>
+
+    <script src="renderer.js"></script>
 </body>
+
 </html>
