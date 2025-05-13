@@ -3,7 +3,7 @@
 # sticknotes
 Projeto de notas autoadesivas (estilo post-it) usando o framework Electron e o banco de dados MongoDB.
 
-![](src/public/img/Sistem.PNG)
+![](src/public/img/Sistem.png)
 
 ## Autor
 Jean Andrade Soares
